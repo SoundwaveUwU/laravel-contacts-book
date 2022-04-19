@@ -1,0 +1,598 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Приложение Телефонная книга",
+        "version": "1.0"
+    },
+    "servers": [
+        {
+            "url": "http://contacts-book.localhost"
+        }
+    ],
+    "paths": {
+        "/api/contact": {
+            "get": {
+                "tags": [
+                    "Контакты"
+                ],
+                "summary": "Получение списка контактов",
+                "description": "Получение списка контактов",
+                "operationId": "contact_index",
+                "requestBody": {
+                    "content": {
+                        "application/json": {}
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Список контактов текущего пользователя",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/ContactResource"
+                                            }
+                                        },
+                                        "meta": {
+                                            "$ref": "#/components/schemas/PaginatorMeta"
+                                        },
+                                        "links": {
+                                            "$ref": "#/components/schemas/PaginatorLinks"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Контакты"
+                ],
+                "summary": "Создание нового контакта",
+                "description": "Создание нового контакта",
+                "operationId": "contact_store",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StoreContactRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Созданный контакт",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/ContactResource"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Ошибки заполнения запроса",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/contact/{id}": {
+            "get": {
+                "tags": [
+                    "Контакты"
+                ],
+                "summary": "Получение контакта",
+                "description": "Получение контакта",
+                "operationId": "contact_show",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {}
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Получение контакта",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/ContactResource"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Контакт не найден"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Контакты"
+                ],
+                "summary": "Обновление контакта",
+                "description": "Обновление контакта",
+                "operationId": "contact_update",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateContactRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Обновленный контакт",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/ContactResource"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Ошибки заполнения запроса",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Контакт не найден"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Контакты"
+                ],
+                "summary": "Удаление контакта",
+                "description": "Удаление контакта",
+                "operationId": "contact_destroy",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {}
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "Контакт успешно удалён"
+                    },
+                    "404": {
+                        "description": "Контакт не найден"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/sanctum/token": {
+            "post": {
+                "tags": [
+                    "Получение токена авторизации"
+                ],
+                "summary": "Получение токена авторизации",
+                "description": "Получение токена авторизации",
+                "operationId": "sanctum_token",
+                "requestBody": {
+                    "description": "Запрос на вход",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "example": "your@email.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "*******"
+                                    },
+                                    "device_name": {
+                                        "type": "string",
+                                        "example": "iPhone"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "token": {
+                                            "type": "string",
+                                            "example": "asdsad<...>"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Данные реквизиты не соотносятся с учетными записями в нашей базе."
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "StoreContactRequest": {
+                "title": "Запрос на создание контакта",
+                "properties": {
+                    "first_name": {
+                        "title": "Имя",
+                        "type": "string",
+                        "example": "Иван"
+                    },
+                    "last_name": {
+                        "title": "Фамилия",
+                        "type": "string",
+                        "example": "Иванов"
+                    },
+                    "patronymic": {
+                        "title": "Отчество",
+                        "type": "string",
+                        "example": "Иванович"
+                    },
+                    "phone": {
+                        "title": "Номер телефона",
+                        "type": "string",
+                        "example": "8 800 555 35 35"
+                    },
+                    "is_favorite": {
+                        "title": "В избранном?",
+                        "type": "boolean"
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateContactRequest": {
+                "title": "Запрос на обновление контакта",
+                "properties": {
+                    "first_name": {
+                        "title": "Имя",
+                        "type": "string",
+                        "example": "Иван"
+                    },
+                    "last_name": {
+                        "title": "Фамилия",
+                        "type": "string",
+                        "example": "Иванов"
+                    },
+                    "patronymic": {
+                        "title": "Отчество",
+                        "type": "string",
+                        "example": "Иванович"
+                    },
+                    "phone": {
+                        "title": "Номер телефона",
+                        "type": "string",
+                        "example": "8 800 555 35 35"
+                    },
+                    "is_favorite": {
+                        "title": "В избранном?",
+                        "type": "boolean"
+                    }
+                },
+                "type": "object"
+            },
+            "ContactResource": {
+                "title": "Ответ по Контакту",
+                "properties": {
+                    "id": {
+                        "title": "ID контакта",
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "user_id": {
+                        "title": "ID пользователя, создавшего контакт",
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "first_name": {
+                        "title": "Имя",
+                        "type": "string",
+                        "example": "Иван"
+                    },
+                    "last_name": {
+                        "title": "Фамилия",
+                        "type": "string",
+                        "example": "Иванов"
+                    },
+                    "patronymic": {
+                        "title": "Отчество",
+                        "type": "string",
+                        "example": "Иванович"
+                    },
+                    "phone": {
+                        "title": "Номер телефона",
+                        "type": "string",
+                        "example": "8 800 555 35 35"
+                    },
+                    "is_favorite": {
+                        "title": "В избранном?",
+                        "type": "boolean"
+                    },
+                    "created_at": {
+                        "title": "Дата создания",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2022-04-19T07:05:40.000000Z"
+                    },
+                    "updated_at": {
+                        "title": "Дата обновления",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2022-04-19T07:05:40.000000Z"
+                    },
+                    "full_name": {
+                        "title": "Полное имя",
+                        "type": "string",
+                        "example": "Иванов Иван Иванович"
+                    }
+                },
+                "type": "object"
+            },
+            "Contact": {
+                "title": "Контакт",
+                "properties": {
+                    "id": {
+                        "title": "ID контакта",
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "user_id": {
+                        "title": "ID пользователя, создавшего контакт",
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "first_name": {
+                        "title": "Имя",
+                        "type": "string",
+                        "example": "Иван"
+                    },
+                    "last_name": {
+                        "title": "Фамилия",
+                        "type": "string",
+                        "example": "Иванов"
+                    },
+                    "patronymic": {
+                        "title": "Отчество",
+                        "type": "string",
+                        "example": "Иванович"
+                    },
+                    "phone": {
+                        "title": "Номер телефона",
+                        "type": "string",
+                        "example": "8 800 555 35 35"
+                    },
+                    "is_favorite": {
+                        "title": "В избранном?",
+                        "type": "boolean"
+                    }
+                },
+                "type": "object"
+            },
+            "PaginatorMetaLink": {
+                "title": "Ссылка в мета-информации пагинатора",
+                "properties": {
+                    "url": {
+                        "title": "Адрес для кнопки",
+                        "type": "string",
+                        "example": "http://contacts-book.localhost/api/contact?page=2"
+                    },
+                    "label": {
+                        "title": "Надпись для кнопки для кнопки",
+                        "type": "string"
+                    },
+                    "active": {
+                        "title": "Активна ли сейчас кнопка",
+                        "type": "boolean"
+                    }
+                },
+                "type": "object"
+            },
+            "PaginatorLinks": {
+                "title": "Ссылки на близкие страницы с другими записями (следующая, предыдущая, первая и т.д.)",
+                "properties": {
+                    "first": {
+                        "title": "Первая страница результатов",
+                        "type": "string",
+                        "example": "http://contacts-book.localhost/api/contact?page=1"
+                    },
+                    "last": {
+                        "title": "Последняя страница результатов",
+                        "type": "string",
+                        "example": "http://contacts-book.localhost/api/contact?page=5"
+                    },
+                    "prev": {
+                        "title": "Предыдущая страница результатов",
+                        "type": "string",
+                        "example": "http://contacts-book.localhost/api/contact?page=2"
+                    },
+                    "next": {
+                        "title": "Следующая страница результатов",
+                        "type": "string",
+                        "example": "http://contacts-book.localhost/api/contact?page=4"
+                    }
+                },
+                "type": "object"
+            },
+            "PaginatorMeta": {
+                "title": "Мета информация пагинатора",
+                "properties": {
+                    "current_page": {
+                        "title": "Текущая страница",
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "from": {
+                        "title": "С записи",
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "to": {
+                        "title": "По запись",
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "total": {
+                        "title": "Всего записей",
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "last_page": {
+                        "title": "Последняя страница",
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "links": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/PaginatorMetaLink"
+                        }
+                    },
+                    "path": {
+                        "title": "Текущий путь",
+                        "type": "string"
+                    },
+                    "per_page": {
+                        "title": "Выдаваемое количество строк за запрос",
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                },
+                "type": "object"
+            },
+            "ValidationErrorResponse": {
+                "title": "Ошибки при валидации данных",
+                "properties": {
+                    "message": {
+                        "title": "Общее сообщение об ошибке",
+                        "type": "string"
+                    },
+                    "errors": {
+                        "title": "Ошибки в полях",
+                        "properties": {
+                            "<...>": {
+                                "title": "Поле",
+                                "type": "array",
+                                "items": {
+                                    "type": "string",
+                                    "example": "Поле Телефон обязательно для заполнения."
+                                }
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "securitySchemes": {
+            "sanctum": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT",
+                "description": "Токен полученный после входа",
+                "in": "header"
+            }
+        }
+    }
+}
