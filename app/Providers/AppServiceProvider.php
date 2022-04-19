@@ -10,7 +10,7 @@ use Illuminate\Support\ServiceProvider;
  *     title="Приложение Телефонная книга"
  * )
  *
- * @OA\Server(url="http://contacts-book.localhost")
+ * @OA\Server(url="http://localhost:8000")
  *
  * @OA\Schema(
  *     schema="PaginatorMetaLink",

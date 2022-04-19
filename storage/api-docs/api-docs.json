@@ -6,7 +6,7 @@
     },
     "servers": [
         {
-            "url": "http://contacts-book.localhost"
+            "url": "http://localhost:8000"
         }
     ],
     "paths": {
